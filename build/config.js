@@ -24,11 +24,11 @@ config.projects = [{
     buildPath: '../production/',
     js: {                  
         compression: [{         
-            dir: ["src/config.js", "src/joystick.js", "src/main.js"],              
+            dir: ["src/joystick.js", "src/main.js"],              
             outputFile: 'joystick-min.js'          
         }],
         merge: [{         
-            dir: ["src/config.js", "src/joystick.js", "src/main.js"],                
+            dir: ["src/joystick.js", "src/main.js"],                
             outputFile: 'joystick.js'          
         }]     
     }

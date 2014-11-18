@@ -1,12 +1,9 @@
 var JoyStick = function(touchArea) {
 	var touchArea = touchArea;
-	var targetV = Config.TargetV;
-	var stickV = Config.StickV;
+	var targetV = 1;
+	var stickV = 1;
 
 	var basePos = null;
-	var doTouchStart = null;
-	var doTouchMove = null;
-	var doTouchEnd = null;
 
 	var isInTouchArea = function(pos) {
 		var xVerify = touchArea.x < pos.x && pos.x < touchArea.x + touchArea.width;
@@ -17,49 +14,44 @@ var JoyStick = function(touchArea) {
 	this.setBasePos = function(pos) {
 		if (isInTouchArea(pos)) {
 			basePos = {x: pos.x, y: pos.y}
-			doTouchStart && doTouchStart();
 		}
+		return basePos;
 	}
 
 	this.getDpos = function(pos) {
+		var res = null;
 		if (isInTouchArea(pos)) {
 			var dx = pos.x - basePos.x;
 			var dy = pos.y - basePos.y;
 			var dl = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
-			doTouchMove && doTouchMove();
-
-			return {
-				stickV: {
-					x: stickV * dx / dl,
-					y: stickV * dy / dl
-				}, 
-				targetV: {
-					x: targetV * dx / dl,
-					y: targetV * dy / dl
+			if (dl > 0) {
+				res = {
+					stick: {
+						vX: stickV * dx / dl,
+						vY: stickV * dy / dl
+					}, 
+					target: {
+						vX: targetV * dx / dl,
+						vY: targetV * dy / dl
+					}
+					
 				}
-				
 			}
+			
 		}
+		return res;
 	}
 
 	this.resetPos = function() {
-		doTouchEnd && doTouchEnd();
 		basePos = null;
-		doTouchStart = null;
-		doTouchMove = null;
-		doTouchEnd = null;
 	}
 
-	this.bindTouchStart = function(func) {
-		doTouchStart = func;
+	this.setTargetV = function(v) {
+		targetV = v;
 	}
 
-	this.bindTouchMove = function(func) {
-		doTouchMove = func;
-	}
-
-	this.bindTouchEnd = function(func) {
-		doTouchEnd = func;
+	this.setStickV = function(v) {
+		stickV = v;
 	}
 };
